@@ -3,6 +3,7 @@ import numpy as np
 import cv2 as cv
 import time
 import serial
+import keyboard
 
 
 #Global Constants
@@ -19,6 +20,7 @@ last_time = time.monotonic()
 
 running = True
 
+
 #Slides a template over an image and returns a value from 0 to 1 indcating the quality of the best match
 def applyTemplate(src, template):
     result = cv.matchTemplate(src, template, cv.TM_CCORR_NORMED)
@@ -27,12 +29,41 @@ def applyTemplate(src, template):
     best_find = np.unravel_index(np.argmax(result), result.shape)
     return result[best_find]
 
-#Sends a Boolean message to Arduino
+
+#Sends a message to Arduino
 def sendToArduino(msg):
-    if msg == True:
-        arduino.write(str.encode('1'))
-    elif msg == False:
-        arduino.write(str.encode('0'))
+    #Muted or not muted message
+    if type(msg) == bool:
+        if msg:
+            arduino.write(str.encode('1'))
+        else:
+            arduino.write(str.encode('0'))
+    
+    #Tell the Arduino to turn off
+    elif msg == 2:
+        print("Sending Off Signal")
+        arduino.write(str.encode('2'))
+
+
+#Asks the User if They Want to End the Program
+def endProgram(e):
+    global running
+
+    print("\nAre You Sure You Want To Exit?")
+    print("(Press Enter to Exit. Press Any Other Key to Continue)")
+
+    time.sleep(.25)
+    if keyboard.read_hotkey() == 'enter':
+        running = False
+        print("Exiting...")
+        return
+    else:
+        print("Continuing...")
+        return
+
+#Install Listener for ESC Key
+keyboard.on_press_key('esc', endProgram)
+
 
 #Load the templates
 muted_template   = cv.imread(muted_name, cv.IMREAD_GRAYSCALE)
@@ -40,7 +71,8 @@ talking_template = cv.imread(talking_name, cv.IMREAD_GRAYSCALE)
 
 if type(muted_template) != np.ndarray or type(talking_template) != np.ndarray:
     print("Error: Failed to Load Templates")
-    running = False
+    exit()
+
 
 #Find which port the arduino is on
 for i in range(10):
@@ -50,11 +82,20 @@ for i in range(10):
     except:
         pass
     else:
+        if arduino.is_open:
+            print("\nFound an Arduino on " + port)
+        else:
+            print("Error: Failed to Connect to Arduino")
+            exit()
         break
 else:
     print("Error: No Arduino Found")
-    running = False
+    exit()
 
+
+#Display initial banner
+print("\n==Starting Program. Press ESC to Quit==")
+print("Testing Icon Sizes. You Can Help by Making Sure the Mute Button is Visible")
 
 while(running):
     #Take a screenshot
@@ -94,9 +135,8 @@ while(running):
                     last_time = time.monotonic()
                     break
 
-        #Otherwise, serach with the scaled template
+        #Otherwise, search with the scaled template
         elif applyTemplate(src, template) > match_thresh:
-            
             sendToArduino(muted)
             last_time = time.monotonic()
             break
@@ -109,3 +149,8 @@ while(running):
         running = False
     else:
         time.sleep(.25)
+
+#Tell the arduino to turn off
+sendToArduino(2)
+arduino.close()
+print("\nProgram Exited Successfully. Goodbye!\n\n")

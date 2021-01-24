@@ -14,6 +14,7 @@
 - Icon must be mostly visible to register
 - Only works in primary monitor
 - Mac and Windows only
+- The Event Listener for ESC Key is Global
 - Not very efficient
 
 
@@ -23,3 +24,4 @@
 - opencv-python
 - pyserial
 - Pillow
+- keyboard
