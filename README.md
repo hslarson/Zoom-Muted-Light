@@ -12,5 +12,14 @@
 
 #### Current Limitations
 - Icon must be mostly visible to register
+- Only works in primary monitor
+- Mac and Windows only
 - Not very efficient
-- Lots of dependencies
+
+
+#### Packages You'll Need
+- numpy
+- matplotlib
+- opencv-python
+- pyserial
+- Pillow
