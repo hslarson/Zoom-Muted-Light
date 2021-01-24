@@ -1,4 +1,4 @@
-# ZoomMutedLight
+# Physical "Muted" Light for Zoom
 
 #### How It Works:
 - Takes frequent screenshots
