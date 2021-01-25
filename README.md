@@ -3,25 +3,31 @@
 #### How It Works:
 - Searches ports for Arduino
 - Takes periodic screenshots
-- Measures the scale of the Zoom icons
-- Scans for the Zoom "Muted/Unmuted" icons in each screenshot using OpenCV
-- Sends the data to the Arduino if an icon is found
+- Thresholds the image and finds rectangular shapes
+- Uses Tesseract to search for the Zoom "Muted/Unmuted" text
+- Sends the data to the Arduino if text is found
 - Arduino displays lights according to the data it receives
 - Arduino stores the last value of the mute button
 
 
 #### Current Limitations
-- Icon must be mostly visible to register
+- Not very efficient
 - Only works in primary monitor
 - Mac and Windows only
 - The Event Listener for ESC Key is Global
-- Not very efficient
 
 
-#### Packages You'll Need
+#### Software You'll Need
+- Python 3
+- Tesseract (Make sure you add file path to config.json)
+- Arduino IDE
+
+
+#### Pip Packages You'll Need
 - numpy
 - matplotlib
 - opencv-python
 - pyserial
 - Pillow
 - keyboard
+- pytesseract
