@@ -32,16 +32,20 @@ def applyTemplate(src, template):
 
 #Sends a message to Arduino
 def sendToArduino(msg):
-    #Muted or not muted message
-    if type(msg) == bool:
-        if msg:
-            arduino.write(str.encode('1'))
-        else:
-            arduino.write(str.encode('0'))
-    
-    #Tell the Arduino to turn off
-    elif msg == 2:
-        arduino.write(str.encode('2'))
+    try:
+        #Muted or not muted message
+        if type(msg) == bool:
+            if msg:
+                arduino.write(str.encode('1'))
+            else:
+                arduino.write(str.encode('0'))
+
+        #Tell the Arduino to turn off
+        elif msg == 2:
+            arduino.write(str.encode('2'))
+    except:
+        print("Error: Arduino Disconnected")
+        exit()
 
 
 #Asks the User if They Want to End the Program
