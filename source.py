@@ -41,7 +41,6 @@ def sendToArduino(msg):
     
     #Tell the Arduino to turn off
     elif msg == 2:
-        print("Sending Off Signal")
         arduino.write(str.encode('2'))
 
 
