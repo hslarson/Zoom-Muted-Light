@@ -93,7 +93,7 @@ else:
 
 
 #Display initial banner
-print("\n==Starting Program. Press ESC to Quit==")
+print("Starting Program. Press ESC to Quit\n")
 print("Testing Icon Sizes. You Can Help by Making Sure the Mute Button is Visible")
 
 while(running):
