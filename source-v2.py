@@ -47,7 +47,8 @@ def sendToArduino(msg):
             arduino.write(str.encode('2'))
     except:
         print("Error: Arduino Disconnected")
-
+        
+        
 #Asks the User if They Want to End the Program
 def endProgram(e):
     global running
@@ -124,7 +125,7 @@ while(running):
         running = False
 
 #Tell the arduino to turn off
-
 sendToArduino(2)
 arduino.close()
 print("\nProgram Exited Successfully. Goodbye!\n\n")
+time.sleep(.25)
