@@ -32,17 +32,20 @@ def applyTemplate(src, template):
 
 #Sends a message to Arduino
 def sendToArduino(msg):
-    #Muted or not muted message
-    if type(msg) == bool:
-        if msg:
-            arduino.write(str.encode('1'))
-        else:
-            arduino.write(str.encode('0'))
-    
-    #Tell the Arduino to turn off
-    elif msg == 2:
-        print("Sending Off Signal")
-        arduino.write(str.encode('2'))
+    try:
+        #Muted or not muted message
+        if type(msg) == bool:
+            if msg:
+                arduino.write(str.encode('1'))
+            else:
+                arduino.write(str.encode('0'))
+
+        #Tell the Arduino to turn off
+        elif msg == 2:
+            arduino.write(str.encode('2'))
+    except:
+        print("Error: Arduino Disconnected")
+        exit()
 
 
 #Asks the User if They Want to End the Program
@@ -94,7 +97,7 @@ else:
 
 
 #Display initial banner
-print("\n==Starting Program. Press ESC to Quit==")
+print("Starting Program. Press ESC to Quit\n")
 print("Testing Icon Sizes. You Can Help by Making Sure the Mute Button is Visible")
 
 while(running):
